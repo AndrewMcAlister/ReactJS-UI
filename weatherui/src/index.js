@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
@@ -7,16 +8,16 @@ import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 function render() {
-  root.render(<App />);
+  root.render(
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
+  );
 }
 
 render();
-
-// function render() {
-//   ReactDOM.render(<App clicks = {model.clicks} onClick={() => {model.clicks +=1; render(); }}/>, document.getElementById('root'));
-// };
-
-// render();
 
 serviceWorkerRegistration.register();
 
