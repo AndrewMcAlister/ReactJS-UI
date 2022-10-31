@@ -10,28 +10,9 @@ const App = () => {
     country: "",
     city: "",
     message: "No Data Yet",
+    loading: false,
+    iserror: false,
   });
-
-  function handleChange(e) {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value,
-    });
-  }
-
-  async function onSearchSubmit(country, city) {
-    try {
-      const url = "http://localhost:8081/api/v1.0/weather";
-      const config = {
-        params: { country: country, city: city },
-        headers: { accept: "application/json" },
-      };
-      const response = await axios.get(url, config);
-      window.localStorage.setItem("Message", response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   useEffect(() => {
     const data = window.localStorage.getItem("WEATHER_STATE");
@@ -41,6 +22,49 @@ const App = () => {
   useEffect(() => {
     window.localStorage.setItem("WEATHER_STATE", JSON.stringify(state));
   }, [state]);
+
+  const handleChange = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  function onSearchSubmit(country, city) {
+    try {
+      setState({ ...state, loading: true, iserror: false });
+      const url = "http://localhost:8081/api/v1.0/weather";
+      const config = {
+        params: { country: country, city: city },
+        headers: { accept: "application/json" },
+      };
+      axios.get(url, config).then((response) => {
+        console.log(JSON.stringify(response.data));
+        const message = JSON.parse(JSON.stringify(response.data)).message;
+        alert(
+          "Weather is " +
+            message +
+            "...but wont go into local storage for some reason"
+        );
+        setState(
+          JSON.stringify({
+            ...state,
+            message: message,
+            loading: false,
+            iserror: false,
+          })
+        );
+      });
+    } catch (error) {
+      console.log(error.message);
+      setState({
+        ...state,
+        message: error.message,
+        loading: false,
+        iserror: true,
+      });
+    }
+  }
 
   return (
     <>

@@ -1,5 +1,8 @@
 import React from "react";
 
+const countryRef = React.createRef();
+const cityRef = React.createRef();
+
 const WeatherForm = (props) => {
   return (
     <form>
@@ -13,6 +16,7 @@ const WeatherForm = (props) => {
           value={props.state.country}
           onChange={(e) => props.onInputUpdate(e)}
           name="country"
+          ref={countryRef}
         />
       </h2>
       <h2>
@@ -23,13 +27,17 @@ const WeatherForm = (props) => {
           value={props.state.city}
           onChange={(e) => props.onInputUpdate(e)}
           name="city"
+          ref={cityRef}
         />
       </h2>
       <br />
       <span>
         <button
           onClick={() =>
-            props.onSearchClick(props.state.country, props.state.city)
+            props.onSearchClick(
+              countryRef?.current.value,
+              cityRef?.current.value
+            )
           }
         >
           Find Out
