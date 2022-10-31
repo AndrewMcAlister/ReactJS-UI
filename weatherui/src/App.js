@@ -19,9 +19,9 @@ const App = () => {
     if (data != null) setState(JSON.parse(data));
   }, []);
 
-  useEffect(() => {
-    window.localStorage.setItem("WEATHER_STATE", JSON.stringify(state));
-  }, [state]);
+  // useEffect(() => {
+  //   window.localStorage.setItem("WEATHER_STATE", JSON.stringify(state));
+  // }, [state]);
 
   const handleChange = (e) => {
     setState({
