@@ -25,28 +25,27 @@ const App = () => {
     );
   };
 
-  function dealWithResult(message) {
-    alert(message);
+  const dealWithResult = (message) => {
     saveWeatherData(weatherData.country, weatherData.city, message);
-  }
+  };
 
-  async function onSearchSubmit(country, city) {
+  const onSearchSubmit = async (country, city) => {
     try {
-      saveWeatherData(country, city, "");
+      saveWeatherData(country, city, ""); //clear last message
       const url = "http://localhost:8081/api/v1.0/weather";
       const config = {
         params: { country: country, city: city },
         headers: { accept: "application/json" },
       };
-      await axios.get(url, config).then((response) => {
+      axios.get(url, config).then((response) => {
         const message = JSON.parse(JSON.stringify(response.data)).message;
         dealWithResult(message);
       });
     } catch (error) {
       console.log(error.message);
-      window.localStorage.setItem("WEATHER_ERROR", error.message);
+      dealWithResult(error.message); //display the error message
     }
-  }
+  };
 
   return (
     <>
