@@ -1,9 +1,23 @@
 import React from "react";
-
-const countryRef = React.createRef();
-const cityRef = React.createRef();
+import { useEffect } from "react";
 
 const WeatherForm = (props) => {
+  const countryRef = React.createRef();
+  const cityRef = React.createRef();
+  const messageRef = React.createRef();
+
+  useEffect(() => {
+    const data = window.localStorage.getItem("WEATHER_DATA");
+    if (data != null) {
+      const weatherData = JSON.parse(data);
+      countryRef.current.value = weatherData.country ?? "";
+      cityRef.current.value = weatherData.city ?? "";
+      messageRef.current.innerHTML = "";
+      if (weatherData.country && weatherData.city)
+        messageRef.current.innerHTML = weatherData.message;
+    }
+  });
+
   return (
     <form>
       <h1 className="page-heading">What Is The Weather Doing?</h1>
@@ -13,8 +27,6 @@ const WeatherForm = (props) => {
           type="text"
           placeholder="Enter Country Name"
           required
-          value={props.state.country}
-          onChange={(e) => props.onInputUpdate(e)}
           name="country"
           ref={countryRef}
         />
@@ -24,8 +36,6 @@ const WeatherForm = (props) => {
           type="text"
           placeholder="Enter City Name"
           required
-          value={props.state.city}
-          onChange={(e) => props.onInputUpdate(e)}
           name="city"
           ref={cityRef}
         />
@@ -46,7 +56,9 @@ const WeatherForm = (props) => {
       <br />
       <br />
       <h2>
-        <label name="message">{props.state.message}</label>
+        <label name="message" ref={messageRef}>
+          {props.weatherData.message}
+        </label>
       </h2>
     </form>
   );
